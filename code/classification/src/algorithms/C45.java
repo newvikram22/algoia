@@ -6,6 +6,7 @@ import java.io.Reader;
 import common.DataToArff;
 
 import weka.classifiers.trees.J48;
+import weka.core.Instance;
 import weka.core.Instances;
 
 /**
@@ -40,8 +41,9 @@ public class C45 implements IClassifier {
 				Reader reader = dta.buildArffFile();
 				
 				instances = new Instances(reader);
+				
 				adapted = new J48();
-				adapted.buildClassifier(instances);
+				//adapted.buildClassifier(instances);
 				
 			} else {
 				System.err.println("C45::readData : could not read data file");
