@@ -42,7 +42,7 @@ public class Main {
 	 * @param args les arguments du programme
 	 */
 	public static void processOptionInline(String[] args) {
-		
+				
 		List<String> argList = Arrays.asList(args);
 		
 		int idAlgorithm = argList.indexOf("--algorithm")+1;
@@ -63,11 +63,11 @@ public class Main {
 			
 			
 			//discrimination de la classe à instancier
-			if (algoStr == "C45") {
+			if (algoStr.equals("C45")) {
 				
 				algorithm = new C45();
 				
-			} else if (algoStr == "NaiveBayes"){
+			} else if (algoStr.equals("NaiveBayes")){
 				
 				algorithm = new NaiveBayes();					
 				
