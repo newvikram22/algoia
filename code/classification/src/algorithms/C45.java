@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import common.Couple;
 import common.DataToArff;
 import common.Util;
 
@@ -36,7 +37,18 @@ public class C45 extends AbstractClassifier {
 	 * le pourcentage de données à considérer comme ensemble d'apprentissage
 	 */
 	private double percentage;
+	
+	/**
+	 *  liste comportant les couples (prédiction, classe) pour chaque instance
+	 */
+	private List<Couple<Integer, Integer>> theResults;
 
+	/**
+	 * constructor
+	 */
+	public C45() {
+		theResults = new ArrayList<Couple<Integer, Integer>>();
+	}
 	/**
 	 * lit les données et initialise l'algorithme
 	 * @param inputFile le fichier comportant les données
@@ -122,25 +134,30 @@ public class C45 extends AbstractClassifier {
 				//on calcule les proportions pour chaque classe
 				double results[] = adapted.distributionForInstance(classMissing);
 
-				System.out.println("ClassValue : "+test.instance(jj).classValue());
-				System.out.println("Probabilities : "+Arrays.toString(results));
-				System.out.println();
+				int classValue = (int)test.instance(jj).classValue();
+				int prediction = Util.indexOfMax(results);
+				theResults.add(new Couple(prediction, classValue));
+				
              }
              
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}	
+	}
 
 	/**
-	 * affiche les résultats
+	 * retourne le tableau des résultats
+	 * @return liste comportant les couples (prédiction, classe) pour chaque instance
 	 */
 	@Override
-	public void printResults() {
-		// TODO Auto-generated method stub
-		
-	}
+	protected List<Couple<Integer, Integer>> getResults() {
+
+		return theResults;
+			
+	}	
+
+	
 
 	
 
