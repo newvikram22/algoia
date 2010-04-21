@@ -42,8 +42,10 @@ public class DataToArff {
 		
 		if (file != null) {
 			
-			String output = "tmp"+file.hashCode()+".arff";
 			try {
+				File tempFile = File.createTempFile("classification-C45-"+file.hashCode(), ".arff");
+				tempFile.deleteOnExit();
+				
 				// load CSV
 				CSVLoader loader = new CSVLoader();
 
@@ -55,11 +57,11 @@ public class DataToArff {
 				// save ARFF
 				ArffSaver saver = new ArffSaver();
 				saver.setInstances(data);
-				saver.setFile(new File(output));
-				saver.setDestination(new File(output));
+				saver.setFile(tempFile);
+				saver.setDestination(tempFile);
 				saver.writeBatch();
 				
-				FileReader fr = new FileReader(new File(output));
+				FileReader fr = new FileReader(tempFile);
 				
 				return fr;
 				
