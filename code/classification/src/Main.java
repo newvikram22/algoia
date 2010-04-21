@@ -1,9 +1,11 @@
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import common.Util;
+
+
+import algorithms.AbstractClassifier;
 import algorithms.C45;
-import algorithms.IClassifier;
 import algorithms.NaiveBayes;
 
 /**
@@ -17,7 +19,7 @@ public class Main {
 	/**
 	 * Instance de l'algorithme de classification
 	 */
-	public static IClassifier algorithm;
+	public static AbstractClassifier algorithm;
 	
 	/**
 	 * Fichier d'entrée
@@ -25,14 +27,21 @@ public class Main {
 	public static String inputFile;
 	
 	/**
+	 * le pourcentage de donnée à considérer comme ensemble d'apprentissage
+	 */
+	public static int percentage;
+	
+	/**
 	 * Retourne l'usage du programme
 	 * @return l'usage du programme
 	 */
 	public static String getUsage() {
 		String str;
-		str = "Usage : java -jar classification.jar --algorithm <algorithm> --source <sourceFile>\n";
+		str = "Usage : java -jar classification.jar --algorithm <algorithm> --source <sourceFile> --percentage <percentage>\n";
 		str += 	"\t <algorithm> = C45 | NaiveBayes : the algorithm to use\n";
 		str += 	"\t <sourceFile> : the input data\n";
+		str += 	"\t <percentage> : the percentage of data to consider as the training set\n";
+
 		
 		return str;
 	}
@@ -47,10 +56,13 @@ public class Main {
 		
 		int idAlgorithm = argList.indexOf("--algorithm")+1;
 		int idSourceFile = argList.indexOf("--source")+1;
+		int idPercentage = argList.indexOf("--percentage")+1;
 		
 		if (	(idAlgorithm <= 0) || 
 				(idSourceFile <= 0) || 
-				(idSourceFile >= argList.size()) || 
+				(idPercentage <= 0) || 
+				(idSourceFile >= argList.size()) ||
+				(idPercentage >= argList.size()) ||
 				(idAlgorithm >= argList.size())) {
 			
 			System.err.println("Bad usage");
@@ -60,6 +72,7 @@ public class Main {
 			
 			String algoStr = argList.get(idAlgorithm);
 			inputFile = argList.get(idSourceFile);
+			percentage = Integer.parseInt(argList.get(idPercentage));
 			
 			
 			//discrimination de la classe à instancier
@@ -87,9 +100,11 @@ public class Main {
 
 		processOptionInline(args);
 		
-		algorithm.readData(inputFile);
+		
+		algorithm.readData(inputFile, percentage);		
 		algorithm.classify();
 		algorithm.printResults();
+		
 		
 		
 		
