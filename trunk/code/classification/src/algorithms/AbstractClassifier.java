@@ -1,6 +1,12 @@
 package algorithms;
 
 import java.io.IOException;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.TreeSet;
+
+import common.Couple;
+import common.Util;
 
 /**
  * Classe abstraite représentant un classifier
@@ -11,6 +17,15 @@ public abstract class AbstractClassifier {
 	
 	public static int SEED = 1337;
 	
+	
+	/**
+	 *  liste comportant les couples (prédiction, classe) pour chaque instance
+	 */
+	private List<Couple<Integer, Integer>> results;
+	
+	public AbstractClassifier() {
+		results = null;
+	}
 	/**
 	 * lit les données et initialise l'algorithme
 	 * @param inputFile le fichier comportant les données
@@ -30,7 +45,18 @@ public abstract class AbstractClassifier {
 		shakeInstances(SEED);
 		
 		doClassify();
+		
+		results = getResults();
+		
+		
 	}
+
+	/**
+	 * retourne le tableau des résultats
+	 * @return liste comportant les couples (prédiction, classe) pour chaque instance
+	 */
+	abstract protected List<Couple<Integer, Integer>> getResults();
+
 
 	/**
 	 * mélange aléatoirement l'ensemble des instances
@@ -47,6 +73,99 @@ public abstract class AbstractClassifier {
 	/**
 	 * affiche les résultats
 	 */
-	abstract public void printResults();
+	public void printResults() {
+		
+		if (results == null) {
+			System.err.println("printResults() : results have not been compted yet !");
+		} else {
+			
+			TreeSet<Integer> setClasses = new TreeSet<Integer>();
+			// result est la liste comportant les couples (prédiction, classe) pour chaque instance
+			for (Couple<Integer, Integer> c : results) {
+				setClasses.add(c.first);
+				setClasses.add(c.second);
+			}
+			
+			Hashtable<Integer, Hashtable<String, Double>> table = new Hashtable<Integer, Hashtable<String, Double>>(); 
+			for (Integer classe : setClasses) {
+				table.put(classe, new Hashtable<String, Double>());
+				table.get(classe).put("truePositive", 0.);
+				table.get(classe).put("falsePositive", 0.);
+				table.get(classe).put("falseNegative", 0.);
+				
+				table.get(classe).put("recall", 0.);
+				table.get(classe).put("precision", 0.);
+				table.get(classe).put("F-measure", 0.);
+			}
+			
+			int numCorrects = 0;
+			int numIncorrects = 0;
+			
+			for (Couple<Integer, Integer> c : results) {
+				if (c.first != c.second) {
+					numIncorrects++;
+					//c'est un faux positif pour c.first
+					//c'est un faux negatif pour c.second
+					
+					Double oldFP_first = table.get(c.first).get("falsePositive");
+					Double oldFN_second = table.get(c.second).get("falseNegative");
+					
+					table.get(c.first).put("falsePositive", 1+oldFP_first);
+					table.get(c.second).put("falseNegative", 1+oldFN_second);
+					
+				} else {
+					numCorrects++;
+					//c'est un vrai positif pour c.first==c.second
+					
+					Double oldTP = table.get(c.first).get("truePositive");
+					
+					table.get(c.first).put("truePositive", 1+oldTP);
+				}
+			}
+			
+			for (Integer classe : setClasses) {
+				
+				Double TP = table.get(classe).get("truePositive");
+				Double FP = table.get(classe).get("falsePositive");
+				Double FN = table.get(classe).get("falseNegative");
+				
+				Double recall = TP/(TP+FN);
+				Double precision = TP/(TP+FP);
+				Double F_measure = 2*(precision*recall)/(precision+recall);
+				
+				table.get(classe).put("recall", recall);
+				table.get(classe).put("precision", precision);
+				table.get(classe).put("F-measure", F_measure);
+				
+				
+			}
+			
+			//nombre de decimales apres la virgule à afficher
+			int numDecimales = 3;
+			
+			Double percentageCorrect = (100.*numCorrects)/(double)results.size();
+			Double percentageIncorrect = (100.*numIncorrects)/(double)results.size();
+			
+			String str = "Results : \n";
+			str += "Correctly classified instances : "+numCorrects+"\t"+Util.printRounded(percentageCorrect, numDecimales)+"%\n";
+			str += "Incorrectly classified instances : "+numIncorrects+"\t"+Util.printRounded(percentageIncorrect, numDecimales)+"%\n";
+			str += "\n";
+			str += "Details by class : \n";
+			str += "\n";
+			str += "Class \tPrecision \tRecall \tF-Measure \n";
+			for (Integer classe : setClasses) {
+				str += classe+"\t";
+				str += Util.printRounded(table.get(classe).get("precision"), numDecimales)+"\t\t";
+				str += Util.printRounded(table.get(classe).get("recall"), numDecimales)+"\t";
+				str += Util.printRounded(table.get(classe).get("F-measure"), numDecimales)+"\n";
+			}
+			
+			System.out.println(str);
+			
+		}
+		
+		
+				
+	}
 
 }

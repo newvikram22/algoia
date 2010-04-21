@@ -1,6 +1,7 @@
 package common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -61,6 +62,32 @@ public class Util {
 	 */
 	public static int getRandomInt(Random gen, int binf, int bsup) {
 		return gen.nextInt(bsup-binf+1)+binf;
+	}
+	
+	/**
+	 * calcule l'index du max d'un tableau d'entiers
+	 * @param vals le tableau d'entiers
+	 * @return l'index du max du tableau
+	 */
+	public static int indexOfMax(double[] vals) {
+		
+		double maxVal = vals[0];
+		int maxid = 0;
+		
+		for (int i = 1 ; i < vals.length ; i++) {
+			if (vals[i] > maxVal) {
+				maxVal = vals[i];
+				maxid = i;
+			}
+		}
+		return maxid;
+	}
+	
+	public static double printRounded(double val, int numDecimales) {
+		val *= Math.pow(10, numDecimales);
+		val = Math.floor(val+0.5);
+		val /= Math.pow(10, numDecimales);
+		return val;
 	}
 
 }

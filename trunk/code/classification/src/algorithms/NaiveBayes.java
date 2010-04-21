@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import common.Couple;
 
 /**
  * Classe implémentant l'algorithme de classification NaiveBayes
@@ -49,7 +52,7 @@ public class NaiveBayes extends AbstractClassifier {
 					nbVal.add(g);
 				}
 			}
-			printResults();
+			printProbabilities();
 
 			// int n=Integer.parseInt(ff.readLine());
 			boolean b = true;
@@ -112,7 +115,7 @@ public class NaiveBayes extends AbstractClassifier {
 						}
 					}
 				}
-				printResults();
+				printProbabilities();
 				b = true;
 
 			}
@@ -142,10 +145,9 @@ public class NaiveBayes extends AbstractClassifier {
 	}	
 
 	/**
-	 * affiche les résultats
+	 * affiche les probabilités
 	 */
-	@Override
-	public void printResults() {
+	public void printProbabilities() {
 		String s="Attribut:\n\n";
 		ArrayList<Integer> a =nbAttributs.get(attributs.size()-1);
 		for(int i=0;i<attributs.size()-1;i++)
@@ -179,6 +181,16 @@ public class NaiveBayes extends AbstractClassifier {
 		
 		System.out.print(s);
 		
+	}
+
+	/**
+	 * retourne le tableau des résultats
+	 * @return liste comportant les couples (prédiction, classe) pour chaque instance
+	 */
+	@Override
+	protected List<Couple<Integer, Integer>> getResults() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
