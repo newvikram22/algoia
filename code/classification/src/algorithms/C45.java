@@ -104,7 +104,7 @@ public class C45 extends AbstractClassifier {
 	@Override
 	public void doClassify() {
 		adapted = new J48();
-		
+				
 		//construction des ensembles d'apprentissage et de test
 		int numInstances = instances.numInstances();
 		int trainSize = (int)Math.round(percentage*numInstances/100.);
