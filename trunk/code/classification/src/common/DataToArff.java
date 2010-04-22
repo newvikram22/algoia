@@ -10,9 +10,12 @@ import java.util.Scanner;
 
 import javax.xml.crypto.Data;
 
+import com.sun.net.httpserver.Filter;
+
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
+import weka.filters.unsupervised.attribute.NumericToNominal;
 
 /**
  * Classe permettant de convertir un fichier de données en un fichier arff
@@ -44,7 +47,7 @@ public class DataToArff {
 			
 			try {
 				File tempFile = File.createTempFile("classification-C45-"+file.hashCode(), ".arff");
-				tempFile.deleteOnExit();
+				//tempFile.deleteOnExit();
 				
 				// load CSV
 				CSVLoader loader = new CSVLoader();
@@ -52,7 +55,22 @@ public class DataToArff {
 				loader.setSource(file);				
 				
 				Instances data = loader.getDataSet();
-				data.setClassIndex(data.numAttributes()-1);
+				data.setClassIndex(data.numAttributes()-1);	
+				
+				NumericToNominal numToNom = new NumericToNominal();
+				String[] options = {""}; // Where options is of form -R <Orbit_kms,Diameter_kms,Mass_kgs>
+				try {
+					
+					numToNom.setOptions(options);
+					numToNom.setInputFormat(data);
+					numToNom.setAttributeIndices("last");
+					data = NumericToNominal.useFilter(data, numToNom); 
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.exit(-1);
+				}
+				
 
 				// save ARFF
 				ArffSaver saver = new ArffSaver();
