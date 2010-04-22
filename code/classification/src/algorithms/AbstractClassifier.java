@@ -11,7 +11,7 @@ import common.Util;
 /**
  * Classe abstraite représentant un classifier
  * @author remi
- *
+ *	
  */
 public abstract class AbstractClassifier {
 	
