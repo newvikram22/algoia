@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import common.Couple;
+import common.Util;
 
 /**
  * Classe implémentant l'algorithme de classification NaiveBayes
@@ -15,9 +16,27 @@ import common.Couple;
  */
 public class NaiveBayes extends AbstractClassifier {
 	
+	/**
+	 * TODO:Temporaire
+	 */
 	private ArrayList<ArrayList<String>> attributs;
 	private ArrayList<ArrayList<Integer>> nbAttributs;
 	private ArrayList<ArrayList<ArrayList<Integer>>> nbVal;
+	
+	/**
+	 * l'ensemble des instances
+	 */
+	private ArrayList<String> instances;
+	
+	/**
+	 * le pourcentage de données à considérer comme ensemble d'apprentissage
+	 */
+	private double percentage;
+	
+	/**
+	 *  liste comportant les couples (prédiction, classe) pour chaque instance
+	 */
+	private List<Couple<Integer, Integer>> theResults;
 
 	/**
 	 * lit les données et initialise l'algorithme
@@ -27,14 +46,18 @@ public class NaiveBayes extends AbstractClassifier {
 	 */
 	@Override
 	public void readData(String inputFile, double percentage) {
+		
+		this.percentage = percentage;
 		attributs= new ArrayList< ArrayList<String> >();
 		nbAttributs= new ArrayList< ArrayList<Integer> >();
 		nbVal= new ArrayList< ArrayList<ArrayList< Integer > > >();
+		instances = new ArrayList<String>();
 		
 		try {
-
 			BufferedReader ff = new BufferedReader(new FileReader(inputFile));
-			String s = ff.readLine();
+			String s;
+			s = ff.readLine();
+			instances.add(s);
 			String[] result = s.split(",");
 			for (int i = 0; i < result.length; i++) {
 				ArrayList<String> e = new ArrayList<String>();
@@ -42,87 +65,38 @@ public class NaiveBayes extends AbstractClassifier {
 				attributs.add(e);
 
 				ArrayList<Integer> f = new ArrayList<Integer>();
-				f.add(1);
+				f.add(0);
 				nbAttributs.add(f);
-				if (i != result.length - 1) {
-					ArrayList<ArrayList<Integer>> g = new ArrayList<ArrayList<Integer>>();
-					f = new ArrayList<Integer>();
-					f.add(1);
-					g.add(f);
-					nbVal.add(g);
-				}
 			}
-			printProbabilities();
-
-			// int n=Integer.parseInt(ff.readLine());
-			boolean b = true;
+			
 			while ((s = ff.readLine()) != null) {
 				result = s.split(",");
-				for (int i = 0; i < result.length - 1; i++) {
+				for (int i = 0; i < result.length; i++) {
 					ArrayList<String> e = attributs.get(i);
 					ArrayList<Integer> f = nbAttributs.get(i);
 					int j = e.indexOf(result[i]);
 					if (j < 0) {
 						e.add(result[i]);
-						f.add(1);
-
-						ArrayList<ArrayList<Integer>> g = nbVal.get(i);
-						ArrayList<Integer> h = new ArrayList<Integer>(g.get(0));
-						ArrayList<Integer> hc = new ArrayList<Integer>(g.get(0));
-						for (int k = 0; k < h.size(); k++) {
-							h.set(k, 0);
-							hc.set(k, 0);
-						}
-						g.add(h);
-						j = e.size() - 1;
-					} else {
-						f.set(j, f.get(j) + 1);
-					}
-
-					e = attributs.get(result.length - 1);
-					int m = e.indexOf(result[result.length - 1]);
-					// System.out.println(result.length-1);
-					if (m < 0) {
-						f = nbAttributs.get(result.length - 1);
-						e.add(result[result.length - 1]);
-						f.add(1);
-						b = false;
-
-						for (int k = 0; k < result.length - 1; k++) {
-							ArrayList<ArrayList<Integer>> g = nbVal.get(k);
-							for (int l = 0; l < g.size(); l++) {
-								ArrayList<Integer> h = g.get(l);
-								if (k == i && l == j) {
-									h.add(1);
-								} else {
-									h.add(0);
-								}
-							}
-						}
-					} else {
-						ArrayList<Integer> z = nbAttributs
-								.get(result.length - 1);
-						if (b) {
-							z.set(m, z.get(m) + 1);
-							b = false;
-						}
-						ArrayList<ArrayList<Integer>> g = nbVal.get(i);
-						for (int l = 0; l < g.size(); l++) {
-							ArrayList<Integer> h = g.get(l);
-							if (l == j) {
-								h.set(m, h.get(m) + 1);
-							}
-						}
+						f.add(0);
 					}
 				}
-				printProbabilities();
-				b = true;
-
+				instances.add(s);
+			}
+			
+			ArrayList<Integer> f;
+			ArrayList<ArrayList<Integer>> g;
+			for (int i = 0; i < nbAttributs.size()-1; i++) {
+				ArrayList<String> e = attributs.get(i);
+				g=new ArrayList<ArrayList<Integer>>();
+				for (int j = 0; j < e.size(); j++) {
+					f=new ArrayList<Integer>(nbAttributs.get(nbAttributs.size()-1));
+					g.add(f);
+				}
+				nbVal.add(g);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	/**
@@ -131,8 +105,16 @@ public class NaiveBayes extends AbstractClassifier {
 	 */
 	@Override
 	protected void shakeInstances(int seed) {
-		// TODO Auto-generated method stub
 		
+		ArrayList<String> shakedInstances = new ArrayList<String>();
+		
+		int shakedIndices[] = Util.buildBijection(seed, instances.size());
+		
+		for (int i = 0 ; i < instances.size() ; i++) {
+			shakedInstances.add(instances.get(shakedIndices[i]));
+		}
+		
+		instances = shakedInstances;
 	}
 	
 	/**
@@ -140,14 +122,90 @@ public class NaiveBayes extends AbstractClassifier {
 	 */
 	@Override
 	public void doClassify() {
-		// TODO Auto-generated method stub
 		
+		//construction des ensembles d'apprentissage et de test
+		int numInstances = instances.size();
+		int trainSize = (int)Math.round(percentage*numInstances/100.);
+		
+		try {
+			//on calcule les propabilités avec l'ensenble d'apprentissage
+			int ind=0;
+			String s;
+			String[] result;
+			boolean b = true;
+			while (ind<trainSize) {
+				s = instances.get(ind);
+				ind++;
+				result = s.split(",");
+				for (int i = 0; i < result.length - 1; i++) {
+					ArrayList<String> e = attributs.get(i);
+					ArrayList<Integer> f = nbAttributs.get(i);
+					int j = e.indexOf(result[i]);
+					f.set(j, f.get(j) + 1);
+					
+					e = attributs.get(result.length - 1);
+					int m = e.indexOf(result[result.length - 1]);
+					
+					ArrayList<Integer> z = nbAttributs.get(result.length - 1);
+					if (b) {
+						z.set(m, z.get(m) + 1);
+						b = false;
+					}
+					ArrayList<ArrayList<Integer>> g = nbVal.get(i);
+					ArrayList<Integer> h = g.get(j);
+					h.set(m, h.get(m) + 1);
+				}
+				b = true;
+			}
+			
+			//on prédit sur l'ensemble de test
+			ArrayList<String> a=attributs.get(attributs.size()-1);
+			ArrayList<Integer> aa=nbAttributs.get(attributs.size()-1);
+			theResults=new ArrayList<Couple<Integer, Integer>>();
+			String v="";
+			while (ind<numInstances) {
+				s = instances.get(ind);
+				v+="Pour linstance "+s+"\n";
+				result = s.split(",");
+				
+				double max=0;
+				int prediction=0;
+				int classValue = a.indexOf(result[result.length-1]);
+				for(int i=0;i<a.size();i++)
+				{
+					
+					double p= aa.get(i)/(double)trainSize;
+					for (int j = 0; j < result.length - 1; j++) 
+					{
+						ArrayList<String> bb=attributs.get(j);
+						ArrayList<Integer> bbb=nbAttributs.get(j);
+						ArrayList<ArrayList<Integer>> cc=nbVal.get(j);
+						ArrayList<Integer> ccc=cc.get(bb.indexOf(result[j]));						
+						p=p*((double)(ccc.get(i)/(double)aa.get(i)))/(double)(bbb.get(bb.indexOf(result[j]))/(double)trainSize);
+					}
+					v+="\nla probabalité de "+a.get(i)+"est de "+p+"\n";
+					if(p>max)
+					{
+						max=p;
+						prediction=i;
+					}
+				}
+				theResults.add(new Couple<Integer, Integer>(prediction, classValue));
+				ind++;
+			}
+			System.out.print(v);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		printProbabilities();
 	}	
 
 	/**
 	 * affiche les probabilités
 	 */
-	public void printProbabilities() {
+	private void printProbabilities() {
 		String s="Attribut:\n\n";
 		ArrayList<Integer> a =nbAttributs.get(attributs.size()-1);
 		for(int i=0;i<attributs.size()-1;i++)
@@ -189,8 +247,8 @@ public class NaiveBayes extends AbstractClassifier {
 	 */
 	@Override
 	protected List<Couple<Integer, Integer>> getResults() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return theResults;
 	}
 
 }
