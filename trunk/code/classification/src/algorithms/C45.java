@@ -136,7 +136,7 @@ public class C45 extends AbstractClassifier {
 
 				int classValue = (int)test.instance(jj).classValue();
 				int prediction = Util.indexOfMax(results);
-				theResults.add(new Couple(prediction, classValue));
+				theResults.add(new Couple<Integer, Integer>(prediction, classValue));
 				
              }
              
@@ -155,6 +155,10 @@ public class C45 extends AbstractClassifier {
 
 		return theResults;
 			
+	}
+	@Override
+	public String getName() {
+		return "C4.5";
 	}	
 
 	

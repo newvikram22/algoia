@@ -21,7 +21,12 @@ public abstract class AbstractClassifier {
 	/**
 	 *  liste comportant les couples (prédiction, classe) pour chaque instance
 	 */
-	private List<Couple<Integer, Integer>> results;
+	protected List<Couple<Integer, Integer>> results;
+	
+	/**
+	 * l'index de la classe
+	 */
+	protected int classIndex;
 	
 	public AbstractClassifier() {
 		results = null;
@@ -34,8 +39,15 @@ public abstract class AbstractClassifier {
 	 */
 	abstract public void readData(String inputFile, double percentage);
 	
+	abstract public String getName();
 	
 	
+	public int getClassIndex() {
+		return classIndex;
+	}
+	public void setClassIndex(int classIndex) {
+		this.classIndex = classIndex;
+	}
 	/**
 	 * classifie les instances
 	 */
@@ -76,7 +88,7 @@ public abstract class AbstractClassifier {
 	public void printResults() {
 		
 		if (results == null) {
-			System.err.println("printResults() : results have not been compted yet !");
+			System.err.println("printResults() : results have not been computed yet !");
 		} else {
 			
 			TreeSet<Integer> setClasses = new TreeSet<Integer>();
