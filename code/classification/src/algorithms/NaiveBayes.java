@@ -251,4 +251,9 @@ public class NaiveBayes extends AbstractClassifier {
 		return theResults;
 	}
 
+	@Override
+	public String getName() {
+		return "NaiveBayes";
+	}
+
 }

@@ -7,6 +7,7 @@ import common.Util;
 import algorithms.AbstractClassifier;
 import algorithms.C45;
 import algorithms.NaiveBayes;
+import algorithms.NaiveBayesV2;
 
 /**
  * Programme principal
@@ -84,6 +85,10 @@ public class Main {
 				
 				algorithm = new NaiveBayes();					
 				
+			} else if (algoStr.equals("NaiveBayesV2")){
+				
+				algorithm = new NaiveBayesV2();
+			
 			} else {
 				System.err.println("Bad usage");
 				System.err.println(getUsage());

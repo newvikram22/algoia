@@ -2,6 +2,7 @@ package common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.Random;
 
 /**
@@ -83,11 +84,28 @@ public class Util {
 		return maxid;
 	}
 	
+	/**
+	 * pour arrondir un double en spécifiant le nombre de chiffres après la virgule
+	 * @param val le double à arrondir
+	 * @param numDecimales le nombre de décimale après la virgule voulu
+	 * @return le double arrondi
+	 */
 	public static double printRounded(double val, int numDecimales) {
 		val *= Math.pow(10, numDecimales);
 		val = Math.floor(val+0.5);
 		val /= Math.pow(10, numDecimales);
 		return val;
+	}
+	
+	/**
+	 * méthode d'addition sécurisée pour les hashtable contenant des doubles
+	 */
+	public static void add(Hashtable<String, Double> table, String key, Double value) {
+		if (table.get(key) == null) {
+			table.put(key, value);
+		} else {
+			table.put(key, table.get(key)+value);
+		}
 	}
 
 }
