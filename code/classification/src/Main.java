@@ -45,7 +45,7 @@ public class Main {
 	 */
 	public static String getUsage() {
 		String str;
-		str = "Usage : java -jar classification.jar --algorithm <algorithm> --source <sourceFile> --percentage <percentage> --classIndex <classIndex>\n";
+		str = "Usage : java -jar classification.jar --algorithm <algorithm> --source <sourceFile> --percentage <percentage> --classIndex <intervalNumber> --classIndex <classIndex>\n";
 		str += 	"\t <algorithm> = C45 | NaiveBayes : the algorithm to use\n";
 		str += 	"\t <sourceFile> : the input data\n";
 		str += 	"\t <percentage> : the percentage of data to consider as the training set\n";
