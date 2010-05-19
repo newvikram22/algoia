@@ -101,6 +101,41 @@ public class NaiveBayes extends AbstractClassifier {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		for(int i=0;i<attributs.size();i++)
+		{
+			ArrayList<String> e = attributs.get(i);
+			ArrayList<Double> a=new ArrayList<Double>();
+			boolean b=true;
+			double d,max=-Double.MAX_VALUE,min=Double.MAX_VALUE;
+			
+			for(int j=0;j<e.size();j++)
+			{
+				//System.out.print(e.get(j)+" ");
+				try{
+					d=Double.parseDouble(e.get(j));
+				}
+				catch(Exception e1)
+				{
+					b=false;
+					break;
+				}
+				
+				a.add(d);
+				if(d>max)
+					max=d;
+				if(d<min)
+					min=d;				
+				
+			}
+			if(b==true)
+			{
+				e.clear();
+				e.add("real");
+				e.add(String.valueOf(min));
+				e.add(String.valueOf(max));
+			}
+			
+		}
 	}
 	
 	/**
