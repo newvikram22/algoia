@@ -103,6 +103,7 @@ public class NaiveBayesV2 extends AbstractClassifier {
 		
 		for (int i = 0 ; i < trainSize ; i++) {
 			train.add(instances.get(i));
+			classes.add(instances.get(i).get(classIndex));
 		}
 		for (int i = trainSize ; i < instances.size(); i++) {
 			test.add(instances.get(i));
@@ -124,12 +125,12 @@ public class NaiveBayesV2 extends AbstractClassifier {
 		for (List<String> lst : train) {
 						
 			//ajout de la classe
-			Util.add(probClasses, lst.get(classIndex), 1.);
-						
+			String instClasse = lst.get(classIndex);
+			Util.add(probClasses, instClasse, 1.);
+									
 			
 			//ajout des attributs
-			for (int i = 0 ; i < numAttributes ; i++) {
-				
+			for (int i = 0 ; i < numAttributes ; i++) {				
 				Util.add(probAttributeByClass.get(lst.get(classIndex)).get(i), lst.get(i), 1.);
 			}
 		}
@@ -258,9 +259,8 @@ public class NaiveBayesV2 extends AbstractClassifier {
 				instances.add(instance);
 				if (instances.size() == 1) {
 					numAttributes = instance.size();
-					classIndex = instance.size()-1;
+					//classIndex = instance.size()-1;
 				}
-				classes.add(instance.get(classIndex));
 			}
 			
 		} catch(Exception e) {

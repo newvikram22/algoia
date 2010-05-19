@@ -28,13 +28,16 @@ public class DataToArff {
 	 * le fichier de données
 	 */
 	File file;
+	private int classIndex;
 	
 	/**
 	 * constructeur par paramètres
 	 * @param file le fichier de données
+	 * @param classIndex 
 	 */
-	public DataToArff(File file) {
+	public DataToArff(File file, int classIndex) {
 		this.file = file;
+		this.classIndex = classIndex;
 	}
 
 	/**
@@ -55,7 +58,7 @@ public class DataToArff {
 				loader.setSource(file);				
 				
 				Instances data = loader.getDataSet();
-				data.setClassIndex(data.numAttributes()-1);	
+				data.setClassIndex(classIndex);	
 				
 				NumericToNominal numToNom = new NumericToNominal();
 				String[] options = {""}; // Where options is of form -R <Orbit_kms,Diameter_kms,Mass_kgs>
@@ -63,7 +66,8 @@ public class DataToArff {
 					
 					numToNom.setOptions(options);
 					numToNom.setInputFormat(data);
-					numToNom.setAttributeIndices("last");
+					int indices[] = {classIndex};
+					numToNom.setAttributeIndicesArray(indices);
 					data = NumericToNominal.useFilter(data, numToNom); 
 					
 				} catch (Exception e) {

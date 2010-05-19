@@ -63,7 +63,7 @@ public class C45 extends AbstractClassifier {
 			
 			File file = new File(inputFile);
 			if (file.isFile()) {
-				DataToArff dta = new DataToArff(file);
+				DataToArff dta = new DataToArff(file, classIndex);
 				Reader reader = dta.buildArffFile();
 				
 				instances = new Instances(reader);
@@ -115,9 +115,9 @@ public class C45 extends AbstractClassifier {
 		
 		try {
 			
-			//on fixe l'indice de la classe parmi les attribut (c'est le dernier)
-			train.setClassIndex(train.numAttributes()-1);
-			test.setClassIndex(train.numAttributes()-1);
+			//on fixe l'indice de la classe parmi les attributs (c'est le dernier)
+			train.setClassIndex(classIndex);
+			test.setClassIndex(classIndex);
 			
 			//construction du classifier
 			adapted.buildClassifier(train);
