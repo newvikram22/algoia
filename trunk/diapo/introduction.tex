@@ -12,8 +12,11 @@
 Un classifieur prend en entrée : 
 \begin{itemize}
  \item $\{(x, f(x)) : x \in A\}$
- 
+ \item $T$ 
 \end{itemize}
+
+Et doit ensuite créer une fonction
+$$\hat{f} : T \longrightarrow C$$ 
 
   
 
@@ -23,5 +26,25 @@ Un classifieur prend en entrée :
   \subsection{Critères d'évaluation}
   \begin{frame}
    \frametitle{Critères d'évaluation}
+Une instance $x \in T$ est bien classée ssi $\hat{f}(x) = f(x)$. On mesure alors : 
+\begin{itemize}
+ \item Pourcentage d'instances de $T$ bien classées (resp. mal classées).
+ \item Pour une classe $c \in C$ : 
+    \begin{itemize}
+      \item Faux positifs : $FP = |\{x \in T : \hat{f}(x) = c \wedge f(x) \neq c\}|$. \\
+	Valeur optimale : $0$.
+      \item Faux négatifs : $FN = |\{x \in T : \hat{f}(x) \neq c \wedge f(x) = c\}|$. \\
+	Valeur optimale : $0$.
+      \item Vrais positifs : $TP = |\{x \in T : \hat{f}(x) = f(x) = c\}|$. \\
+	Valeur optimale : $|T|$.
+      \item Precision : $\frac{TP}{TP + FP}$. \\
+	Valeur optimale : $1$.
+      \item Recall : $\frac{TP}{TP + FN}$. \\
+	Valeur optimale : $1$.
+      \item F-Mesure : $2 * \frac{precision * recall}{precision + recall}$. \\
+	Valeur optimale : $1$.
+    \end{itemize}
+\end{itemize}
+
 
   \end{frame}
