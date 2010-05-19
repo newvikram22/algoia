@@ -68,6 +68,30 @@ public class NaiveBayesV2 extends AbstractClassifier {
 	
 	
 	
+	public List<List<String>> getInstances() {
+		return instances;
+	}
+
+	public void setInstances(List<List<String>> instances) {
+		this.instances = instances;
+	}
+
+	public int getNumAttributes() {
+		return numAttributes;
+	}
+
+	public void setNumAttributes(int numAttributes) {
+		this.numAttributes = numAttributes;
+	}
+
+	public Set<String> getClasses() {
+		return classes;
+	}
+
+	public void setClasses(Set<String> classes) {
+		this.classes = classes;
+	}
+
 	@Override
 	protected void doClassify() {
 		
