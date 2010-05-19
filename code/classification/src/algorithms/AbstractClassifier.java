@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.TreeSet;
 
 import common.Couple;
-import common.Result;
 import common.Util;
 
 /**
@@ -30,6 +29,11 @@ public abstract class AbstractClassifier {
 	 * l'index de la classe
 	 */
 	protected int classIndex;
+	
+	/**
+	 * nombre d'intervalles pour la discrétisation
+	 */
+	protected int intervalNumber;
 
 	protected Double percentageCorrect;
 	protected Double percentageIncorrect;
@@ -52,6 +56,7 @@ public abstract class AbstractClassifier {
 
 	public AbstractClassifier() {
 		results = null;
+		intervalNumber=-1;
 	}
 
 	/**
@@ -68,6 +73,14 @@ public abstract class AbstractClassifier {
 
 	abstract public String getName();
 
+	public int getIntervalNumber() {
+		return intervalNumber;
+	}
+
+	public void setIntervalNumber(int intervalNumber) {
+		this.intervalNumber = intervalNumber;
+	}
+
 	public int getClassIndex() {
 		return classIndex;
 	}
@@ -75,7 +88,6 @@ public abstract class AbstractClassifier {
 	public void setClassIndex(int classIndex) {
 		this.classIndex = classIndex;
 	}
-
 	/**
 	 * classifie les instances
 	 */

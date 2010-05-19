@@ -1,9 +1,6 @@
 import java.util.Arrays;
 import java.util.List;
 
-import common.Util;
-
-
 import algorithms.AbstractClassifier;
 import algorithms.C45;
 import algorithms.NaiveBayes;
@@ -36,6 +33,11 @@ public class Main {
 	 * l'index de la classe
 	 */
 	public static int classIndex;
+
+	/**
+	 * nombre d'intervalles pour la discrétisation
+	 */
+	public static int intervalNumber;
 	
 	/**
 	 * Retourne l'usage du programme
@@ -48,7 +50,7 @@ public class Main {
 		str += 	"\t <sourceFile> : the input data\n";
 		str += 	"\t <percentage> : the percentage of data to consider as the training set\n";
 		str += 	"\t <classIndex> : the index of the class\n";
-
+		str += 	"\t <intervalNumber> : the number of intervals k\n";
 
 		
 		return str;
@@ -66,15 +68,18 @@ public class Main {
 		int idSourceFile = argList.indexOf("--source")+1;
 		int idPercentage = argList.indexOf("--percentage")+1;
 		int idClassIndex= argList.indexOf("--classIndex")+1;
+		int idIntervalNumber= argList.indexOf("--intervalNumber")+1;
 		
 		if (	(idAlgorithm <= 0) || 
 				(idSourceFile <= 0) || 
 				(idPercentage <= 0) || 
 				(idClassIndex <= 0) || 
+				(idIntervalNumber <= 0) ||
 				(idSourceFile >= argList.size()) ||
 				(idPercentage >= argList.size()) ||
-				(idAlgorithm >= argList.size())  ||
-				(idClassIndex >= argList.size()) ) {
+				(idAlgorithm >= argList.size()) ||
+				(idClassIndex >= argList.size())||
+				(idIntervalNumber >= argList.size()) ) {
 			
 			
 			System.err.println("Bad usage");
@@ -86,8 +91,7 @@ public class Main {
 			inputFile = argList.get(idSourceFile);
 			percentage = Integer.parseInt(argList.get(idPercentage));
 			classIndex = Integer.parseInt(argList.get(idClassIndex));
-			
-			
+			intervalNumber =Integer.parseInt(argList.get(idIntervalNumber));
 			//discrimination de la classe à instancier
 			if (algoStr.equals("C45")) {
 				
@@ -117,6 +121,7 @@ public class Main {
 
 		processOptionInline(args);
 		
+		algorithm.setIntervalNumber(intervalNumber);
 		algorithm.setClassIndex(classIndex);
 		algorithm.readData(inputFile, percentage);	
 		algorithm.classify();
