@@ -59,6 +59,7 @@ public class NaiveBayes extends AbstractClassifier {
 			s = ff.readLine();
 			instances.add(s);
 			String[] result = s.split(",");
+			
 			for (int i = 0; i < result.length; i++) {
 				ArrayList<String> e = new ArrayList<String>();
 				e.add(result[i]);
@@ -85,14 +86,17 @@ public class NaiveBayes extends AbstractClassifier {
 			
 			ArrayList<Integer> f;
 			ArrayList<ArrayList<Integer>> g;
-			for (int i = 0; i < nbAttributs.size()-1; i++) {
-				ArrayList<String> e = attributs.get(i);
-				g=new ArrayList<ArrayList<Integer>>();
-				for (int j = 0; j < e.size(); j++) {
-					f=new ArrayList<Integer>(nbAttributs.get(nbAttributs.size()-1));
-					g.add(f);
+			for (int i = 0; i < nbAttributs.size(); i++) {
+				if(i!=classIndex){
+					ArrayList<String> e = attributs.get(i);
+					g=new ArrayList<ArrayList<Integer>>();
+					for (int j = 0; j < e.size(); j++) {
+						f=new ArrayList<Integer>(nbAttributs.get(classIndex));
+						g.add(f);
+					}
+					nbVal.add(g);
 				}
-				nbVal.add(g);
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,16 +141,18 @@ public class NaiveBayes extends AbstractClassifier {
 				s = instances.get(ind);
 				ind++;
 				result = s.split(",");
-				for (int i = 0; i < result.length - 1; i++) {
+				for (int i = 0; i < result.length; i++) {
+					if(i!=classIndex)
+					{
 					ArrayList<String> e = attributs.get(i);
 					ArrayList<Integer> f = nbAttributs.get(i);
 					int j = e.indexOf(result[i]);
 					f.set(j, f.get(j) + 1);
 					
-					e = attributs.get(result.length - 1);
-					int m = e.indexOf(result[result.length - 1]);
+					e = attributs.get(classIndex);
+					int m = e.indexOf(result[classIndex]);
 					
-					ArrayList<Integer> z = nbAttributs.get(result.length - 1);
+					ArrayList<Integer> z = nbAttributs.get(classIndex);
 					if (b) {
 						z.set(m, z.get(m) + 1);
 						b = false;
@@ -154,13 +160,14 @@ public class NaiveBayes extends AbstractClassifier {
 					ArrayList<ArrayList<Integer>> g = nbVal.get(i);
 					ArrayList<Integer> h = g.get(j);
 					h.set(m, h.get(m) + 1);
+					}
 				}
 				b = true;
 			}
 			
 			//on prédit sur l'ensemble de test
-			ArrayList<String> a=attributs.get(attributs.size()-1);
-			ArrayList<Integer> aa=nbAttributs.get(attributs.size()-1);
+			ArrayList<String> a=attributs.get(classIndex);
+			ArrayList<Integer> aa=nbAttributs.get(classIndex);
 			theResults=new ArrayList<Couple<Integer, Integer>>();
 			String v="";
 			while (ind<numInstances) {
@@ -170,18 +177,21 @@ public class NaiveBayes extends AbstractClassifier {
 				
 				double max=0;
 				int prediction=0;
-				int classValue = a.indexOf(result[result.length-1]);
+				int classValue = a.indexOf(result[classIndex]);
 				for(int i=0;i<a.size();i++)
 				{
 					
 					double p= aa.get(i)/(double)trainSize;
-					for (int j = 0; j < result.length - 1; j++) 
+					for (int j = 0; j < result.length; j++) 
 					{
+						if(j!=classIndex)
+						{
 						ArrayList<String> bb=attributs.get(j);
 						ArrayList<Integer> bbb=nbAttributs.get(j);
 						ArrayList<ArrayList<Integer>> cc=nbVal.get(j);
 						ArrayList<Integer> ccc=cc.get(bb.indexOf(result[j]));						
 						p=p*((double)(ccc.get(i)/(double)aa.get(i)))/(double)(bbb.get(bb.indexOf(result[j]))/(double)trainSize);
+						}
 					}
 					v+="\nla probabalité de "+a.get(i)+"est de "+p+"\n";
 					if(p>max)
@@ -207,9 +217,11 @@ public class NaiveBayes extends AbstractClassifier {
 	 */
 	private void printProbabilities() {
 		String s="Attribut:\n\n";
-		ArrayList<Integer> a =nbAttributs.get(attributs.size()-1);
-		for(int i=0;i<attributs.size()-1;i++)
+		ArrayList<Integer> a =nbAttributs.get(classIndex);
+		for(int i=0;i<attributs.size();i++)
 		{
+			if(i!=classIndex)
+			{
 			ArrayList<String> e =attributs.get(i);
 			ArrayList<Integer> f =nbAttributs.get(i);
 			ArrayList< ArrayList<Integer> > g =nbVal.get(i);
@@ -228,8 +240,9 @@ public class NaiveBayes extends AbstractClassifier {
 				}
 			}
 			s+="\n";
+			}
 		}
-		ArrayList<String> e =attributs.get(attributs.size()-1);
+		ArrayList<String> e =attributs.get(classIndex);
 		for(int j=0;j<e.size();j++)
 		{		
 			s+=e.get(j)+" "+a.get(j)+" ";
