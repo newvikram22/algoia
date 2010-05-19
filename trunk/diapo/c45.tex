@@ -1,1 +1,23 @@
- 
+ \begin{frame}
+  \frametitle{L'algorithme C4.5}
+En bref : 
+\begin{itemize}
+ \item Algorithme dû à Ross Quinlan.
+ \item Extension de son précédent algorithme ID3.
+ \item Méthode générant un arbre de décision.
+\end{itemize}
+Pour construire un noeud de l'arbre : 
+\begin{itemize}
+ \item Choix d'un attribut qui sépare le mieux l'ensemble d'apprentissage.
+ \item Critère : Entropie relative de chaque attribut.
+ \item L'attribut qui a l'entropie relative la plus forte est choisi pour séparer l'ensemble d'instances.
+\end{itemize}
+Points forts de C4.5 :
+\begin{itemize}
+ \item Peut traiter des attributs discrets comme continus.
+ \item Peut traiter des valeurs manquantes.
+ \item Arbres plus petits grâce à un élagage.
+\end{itemize}
+
+
+ \end{frame}
