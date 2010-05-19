@@ -84,57 +84,79 @@ public class NaiveBayes extends AbstractClassifier {
 				instances.add(s);
 			}
 			
-			ArrayList<Integer> f;
-			ArrayList<ArrayList<Integer>> g;
-			for (int i = 0; i < nbAttributs.size(); i++) {
-				if(i!=classIndex){
-					ArrayList<String> e = attributs.get(i);
-					g=new ArrayList<ArrayList<Integer>>();
-					for (int j = 0; j < e.size(); j++) {
-						f=new ArrayList<Integer>(nbAttributs.get(classIndex));
-						g.add(f);
-					}
-					nbVal.add(g);
-				}
-				
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		for(int i=0;i<attributs.size();i++)
+		//Discrétisation des Données
+		if(intervalNumber!=-1)
 		{
-			ArrayList<String> e = attributs.get(i);
-			ArrayList<Double> a=new ArrayList<Double>();
-			boolean b=true;
-			double d,max=-Double.MAX_VALUE,min=Double.MAX_VALUE;
-			
-			for(int j=0;j<e.size();j++)
+			for(int i=0;i<attributs.size();i++)
 			{
-				//System.out.print(e.get(j)+" ");
-				try{
-					d=Double.parseDouble(e.get(j));
-				}
-				catch(Exception e1)
+				ArrayList<String> e = attributs.get(i);
+				ArrayList<Double> a=new ArrayList<Double>();
+				boolean b=true;
+				double d,max=-Double.MAX_VALUE,min=Double.MAX_VALUE;
+				
+				for(int j=0;j<e.size();j++)
 				{
-					b=false;
-					break;
+					//System.out.print(e.get(j)+" ");
+					try{
+						d=Double.parseDouble(e.get(j));
+					}
+					catch(Exception e1)
+					{
+						b=false;
+						break;
+					}
+					
+					a.add(d);
+					if(d>max)
+						max=d;
+					if(d<min)
+						min=d;				
+					
 				}
-				
-				a.add(d);
-				if(d>max)
-					max=d;
-				if(d<min)
-					min=d;				
-				
+				if(b==true)
+				{
+					ArrayList<Integer> f = nbAttributs.get(i);
+					e.clear();
+					e.add("real");
+					e.add(String.valueOf(min));
+					e.add(String.valueOf(max));
+					e.add(String.valueOf((max-min)/intervalNumber));
+					f.clear();
+					for(int j=0;j<intervalNumber;j++)
+					{
+						f.add(0);
+					}
+				}
 			}
-			if(b==true)
-			{
-				e.clear();
-				e.add("real");
-				e.add(String.valueOf(min));
-				e.add(String.valueOf(max));
+		}
+		ArrayList<Integer> f;
+		ArrayList<ArrayList<Integer>> g;
+		for (int i = 0; i < nbAttributs.size(); i++) {
+			if(i!=classIndex){
+				ArrayList<Integer> e = nbAttributs.get(i);
+				g=new ArrayList<ArrayList<Integer>>();
+				for (int j = 0; j < e.size(); j++) {
+					f=new ArrayList<Integer>(nbAttributs.get(classIndex));
+					g.add(f);
+				}
+				nbVal.add(g);
 			}
 			
+		}
+		for (int i = 0; i < nbAttributs.size(); i++) {
+			ArrayList<Integer> e = nbAttributs.get(i);
+			for (int j = 0; j < e.size(); j++) {
+				System.out.print(e.get(j)+" ");
+			}
+			System.out.println();
+			ArrayList<String> dd = attributs.get(i);
+			for (int j = 0; j < dd.size(); j++) {
+				System.out.print(dd.get(j)+" - ");
+			}
+			System.out.println();
 		}
 	}
 	
@@ -244,7 +266,7 @@ public class NaiveBayes extends AbstractClassifier {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		printProbabilities();
+		//printProbabilities();
 	}	
 
 	/**

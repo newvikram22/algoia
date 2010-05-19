@@ -1,1 +1,41 @@
- 
+\subsection{Théorème de Bayes}
+	\begin{frame}
+	\frametitle{Théorème de Bayes}
+	\begin{center}
+	\begin{LARGE}$A$ et $B$ deux évènements.\end{LARGE}\\\
+	
+	\begin{LARGE}$P(A|B)=\dfrac{P(B|A)P(A)}{P(B)}$\end{LARGE}
+	\end{center}
+	\end{frame}
+	
+	\begin{frame}
+	\frametitle{Théorème de Bayes}
+	\begin{LARGE}Indépendance des évènements\end{LARGE}\\\
+	\begin{center}
+	\begin{LARGE}$A_{1}, A_{2}, ...A_{n}$ des évènements. Si $A_{1}, A_{2}, ...A_{n}$ sont conditionnellement indépendants alors\end{LARGE}\\\
+	\begin{LARGE}$P(A_{1}\cap A_{2}\cap ...\cap A_{n})=P(A_{1}).P(A_{2})....P(A_{n})$\end{LARGE}
+	\end{center}
+	\end{frame}
+	
+	\begin{frame}
+	\frametitle{Théorème de Bayes}
+	\begin{LARGE}Généralisation du théorème de Bayes\end{LARGE}\\\
+	\begin{center}
+	\begin{LARGE}Si $A_{1}, A_{2}, ...A_{n}$ sont conditionnellement indépendants alors\end{LARGE}\\\
+	\begin{large}$P(B|A_{1}\cap A_{2}\cap...\cap A_{n})=\dfrac{P(A_{1}|B).P(A_{2}|B)...P(A_{n}|B).P(B)}{P(A_{1}).P(A_{2})...P(A_{N})}$\end{large}
+	\end{center}
+	\end{frame}
+	
+	\subsection{Naïve Bayes}
+	\begin{frame}
+	\frametitle{Naïve Bayes}
+	\begin{itemize}
+	\item On calcule dans l'ensemble d'apprentissage $A$, pour chaque classe $c_{i}\in C$ la probabilité $P(c=c_{i})$
+	\item Pour chaque valeur $e_{j,k}$ de chaque ensemble $E_{j}$ et pour chaque classe $c_{i}$ on calcule la probabilité $P(e_{j}=e_{j,k}|c=c_{i})$
+	\item Pour chaque instance $x=(x_{1},x_{2},...x_{n})$ de $T$:
+	\begin{center}
+	\[\hat{f}(x)=\operatorname*{arg\,max}_{c_{i}} \lbrace P(c=c_{i}|e_{1}=x_{1}\cap e_{2}=x_{2}\cap ...\cap e_{n}=x_{n})\rbrace\]
+	\end{center}
+	avec la formule de Bayes généralisée et en supposant que les $e_{j}$ sont conditionnellement indépendants.
+	\end{itemize}
+	\end{frame}
