@@ -117,9 +117,8 @@ public class Main {
 
 		processOptionInline(args);
 		
-		
-		algorithm.readData(inputFile, percentage);	
 		algorithm.setClassIndex(classIndex);
+		algorithm.readData(inputFile, percentage);	
 		algorithm.classify();
 		algorithm.printResults();
 		
