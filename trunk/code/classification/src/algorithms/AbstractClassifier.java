@@ -138,7 +138,7 @@ public abstract class AbstractClassifier {
 	 */
 	abstract protected void doClassify();
 
-	private void computeResults() {
+	public void computeResults() {
 		if (results == null) {
 			System.err
 					.println("printResults() : results have not been computed yet !");
@@ -250,5 +250,9 @@ public abstract class AbstractClassifier {
 		System.out.println(strResults);
 
 	}
+
+        public String getStrResults() {
+            return strResults;
+        }
 
 }

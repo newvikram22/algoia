@@ -90,6 +90,15 @@ public class NaiveBayesV2 extends AbstractClassifier {
 	private void methodEWD() {
 		for(int i=0;i<numAttributes;i++)
 		{
+			/*
+			System.out.println("AVANT:");
+			if (i==0) {
+				for (List<String> inst : instances) {
+					System.out.println(inst.get(i));
+				}
+			}
+			*/
+			
 			boolean b=true;
 			double d,max=-Double.MAX_VALUE,min=Double.MAX_VALUE;
 			
@@ -132,6 +141,15 @@ public class NaiveBayesV2 extends AbstractClassifier {
 					}
 				}
 			}
+			/*
+			System.out.println("APRES :");
+			if (i==0) {
+				for (List<String> inst : instances) {
+					System.out.println(inst.get(i));
+				}
+			}
+			
+			*/
 		}
 	}
 
@@ -197,10 +215,12 @@ public class NaiveBayesV2 extends AbstractClassifier {
 	}	
 	
 	private void discretizeData() {
-		if(discretizationMethod=="EWD")
+		if(discretizationMethod.equals("EWD")) {
 			methodEWD();
-		else
+
+                } else if (discretizationMethod.equals("EFD")) {
 			methodEFD();
+                } 
 	}
 	
 	@Override
