@@ -102,7 +102,7 @@ public class Main {
 			classIndex = Integer.parseInt(argList.get(idClassIndex));
 			intervalNumber =Integer.parseInt(argList.get(idIntervalNumber));
 			discretizationMethod =argList.get(idDiscretizationMethod);
-			if(discretizationMethod.equals("EWD") && discretizationMethod.equals("EFD"))
+			if(!discretizationMethod.equals("EWD") && !discretizationMethod.equals("EFD"))
 			{
 				System.err.println("Bad usage : discretizationMethod");
 				System.err.println(getUsage());
