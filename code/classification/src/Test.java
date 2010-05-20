@@ -200,7 +200,7 @@ public class Test {
 		str += "\\begin{tabular}{|c|c|c|c|c|c|c|c|}\n";
 		str += "\\hline\n";
 		str += "Dataset & num. instances & nature & num. attributes & num. classes & \\multicolumn{3}{c|}{ Classification error } \\\\\n";
-		str += "\\cline{5-6}\n";
+		str += "\\cline{6-7}\n";
 		str += "& & & & & C4.5 & Naive Bayes k=4 & Naive Bayes \\\\\n";
 		str += "\\hline\n";
 		
