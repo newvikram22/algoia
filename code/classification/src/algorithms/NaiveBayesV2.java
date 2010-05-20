@@ -203,7 +203,7 @@ public class NaiveBayesV2 extends AbstractClassifier {
 						while((k<instances.size()/intervalNumber || k==0) && j<instances.size())
 						{
 							List<String> e =  instances.get(triIndex.get(j));
-							e.set(i, String.valueOf(k));
+							e.set(i, String.valueOf(l));
 							k++;j++;
 						}
 						if(l<intervalNumber)

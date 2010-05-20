@@ -34,6 +34,8 @@ public class Test {
 	private int numWinsNaiveBayes;
 	private int numWinsNaiveBayes2;
 	
+	private int intervalNumber;
+	
 	private void init() {	
 		
 		initClassIndexes();
@@ -125,7 +127,8 @@ public class Test {
 			NaiveBayesV2 naiveBayes = new NaiveBayesV2();
 			try{
 				naiveBayes.setClassIndex(classIndexes.get(path));
-				naiveBayes.setIntervalNumber(4);
+				intervalNumber= 10;
+				naiveBayes.setIntervalNumber(intervalNumber);
 				naiveBayes.setDiscretizationMethod("EWD");
 				naiveBayes.readData(path, percentage);
 				naiveBayes.classify();
@@ -201,7 +204,7 @@ public class Test {
 		str += "\\hline\n";
 		str += "Dataset & num. instances & nature & num. attributes & num. classes & \\multicolumn{3}{c|}{ Classification error } \\\\\n";
 		str += "\\cline{6-7}\n";
-		str += "& & & & & C4.5 & Naive Bayes k=4 & Naive Bayes \\\\\n";
+		str += "& & & & & C4.5 & Naive Bayes k="+intervalNumber+" & Naive Bayes \\\\\n";
 		str += "\\hline\n";
 		
 		for (Result result : results) {
