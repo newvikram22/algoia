@@ -67,6 +67,11 @@ public class GUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaLog = new javax.swing.JTextArea();
         jTextFieldPourcentage = new javax.swing.JTextField();
+        jCheckBoxDiscretisation = new javax.swing.JCheckBox();
+        jLabelIntervalNumber = new javax.swing.JLabel();
+        jTextFieldIntervalNumber = new javax.swing.JTextField();
+        jLabelDiscretisationMethod = new javax.swing.JLabel();
+        jComboBoxDiscretisation = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -105,7 +110,7 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        jButtonReadData.setText("Read data");
+        jButtonReadData.setText("Initialisation");
         jButtonReadData.setEnabled(false);
         jButtonReadData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -122,10 +127,31 @@ public class GUI extends javax.swing.JFrame {
         });
 
         jTextAreaLog.setColumns(20);
+        jTextAreaLog.setEditable(false);
         jTextAreaLog.setRows(5);
         jScrollPane1.setViewportView(jTextAreaLog);
 
         jTextFieldPourcentage.setText("66");
+
+        jCheckBoxDiscretisation.setText("Discrétisation");
+        jCheckBoxDiscretisation.setEnabled(false);
+        jCheckBoxDiscretisation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxDiscretisationActionPerformed(evt);
+            }
+        });
+
+        jLabelIntervalNumber.setText("Nombre d'intervalles : ");
+        jLabelIntervalNumber.setEnabled(false);
+
+        jTextFieldIntervalNumber.setText("10");
+        jTextFieldIntervalNumber.setEnabled(false);
+
+        jLabelDiscretisationMethod.setText("Méthode : ");
+        jLabelDiscretisationMethod.setEnabled(false);
+
+        jComboBoxDiscretisation.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "EWD", "EFD" }));
+        jComboBoxDiscretisation.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -145,24 +171,36 @@ public class GUI extends javax.swing.JFrame {
                         .addComponent(jButtonParcourir)
                         .addGap(12, 12, 12))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelAlgorithme)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabelPourcentage)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldPourcentage))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabelClassIndex)
                                 .addGap(18, 18, 18)
-                                .addComponent(jComboBoxAlgorihtme, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabelPourcentage)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jTextFieldPourcentage))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabelClassIndex)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jTextFieldClassIndex, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButtonReadData, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-                            .addComponent(jButtonClassify, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE))
+                                .addComponent(jTextFieldClassIndex, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(32, 32, 32)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelIntervalNumber)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldIntervalNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelDiscretisationMethod)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBoxDiscretisation, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jButtonClassify, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonReadData, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabelAlgorithme)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBoxAlgorihtme, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jCheckBoxDiscretisation)
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -177,23 +215,28 @@ public class GUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelAlgorithme)
-                    .addComponent(jComboBoxAlgorihtme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jComboBoxAlgorihtme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBoxDiscretisation))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldPourcentage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelPourcentage, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonReadData))
+                    .addComponent(jButtonReadData)
+                    .addComponent(jLabelIntervalNumber)
+                    .addComponent(jTextFieldIntervalNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelClassIndex)
-                            .addComponent(jTextFieldClassIndex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTextFieldClassIndex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelDiscretisationMethod)
+                            .addComponent(jComboBoxDiscretisation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(7, 7, 7)
                         .addComponent(jButtonClassify)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -223,7 +266,18 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonParcourirActionPerformed
 
     private void jComboBoxAlgorihtmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxAlgorihtmeActionPerformed
-        // TODO add your handling code here:
+        if (jComboBoxAlgorihtme.getSelectedItem().toString().equals("C4.5")) {
+            jCheckBoxDiscretisation.setEnabled(false);
+            jTextFieldIntervalNumber.setEnabled(false);
+            jLabelIntervalNumber.setEnabled(false);
+            jComboBoxDiscretisation.setEnabled(false);
+            jLabelDiscretisationMethod.setEnabled(false);
+        } else {
+            jCheckBoxDiscretisation.setEnabled(true);
+            jCheckBoxDiscretisation.setSelected(false);
+            //jTextFieldIntervalNumber.setEnabled(true);
+            //jLabelIntervalNumber.setEnabled(true);
+        }
     }//GEN-LAST:event_jComboBoxAlgorihtmeActionPerformed
 
     private void jTextFieldClassIndexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldClassIndexActionPerformed
@@ -253,7 +307,13 @@ public class GUI extends javax.swing.JFrame {
         }
 
         classifier.setClassIndex(classIndex);
-        classifier.setIntervalNumber(-1);
+
+        classifier.setDiscretizationMethod(jComboBoxDiscretisation.getSelectedItem().toString());
+        if (jCheckBoxDiscretisation.isSelected()) {
+            classifier.setIntervalNumber(Integer.parseInt(jTextFieldIntervalNumber.getText()));
+        } else {
+            classifier.setIntervalNumber(-1);
+        }
 
         this.pourcentage = Double.parseDouble(jTextFieldPourcentage.getText());
 
@@ -263,6 +323,22 @@ public class GUI extends javax.swing.JFrame {
         jButtonClassify.setEnabled(true);
 
     }//GEN-LAST:event_jButtonReadDataActionPerformed
+
+    private void jCheckBoxDiscretisationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxDiscretisationActionPerformed
+
+        if (jCheckBoxDiscretisation.isSelected()) {
+            jLabelIntervalNumber.setEnabled(true);
+            jTextFieldIntervalNumber.setEnabled(true);
+            jComboBoxDiscretisation.setEnabled(true);
+            jLabelDiscretisationMethod.setEnabled(true);
+        } else {
+            jLabelIntervalNumber.setEnabled(false);
+            jTextFieldIntervalNumber.setEnabled(false);
+            jComboBoxDiscretisation.setEnabled(false);
+            jLabelDiscretisationMethod.setEnabled(false);
+        }
+        
+    }//GEN-LAST:event_jCheckBoxDiscretisationActionPerformed
 
     /**
     * @param args the command line arguments
@@ -279,14 +355,19 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton jButtonClassify;
     private javax.swing.JButton jButtonParcourir;
     private javax.swing.JButton jButtonReadData;
+    private javax.swing.JCheckBox jCheckBoxDiscretisation;
     private javax.swing.JComboBox jComboBoxAlgorihtme;
+    private javax.swing.JComboBox jComboBoxDiscretisation;
     private javax.swing.JLabel jLabelAlgorithme;
     private javax.swing.JLabel jLabelClassIndex;
+    private javax.swing.JLabel jLabelDiscretisationMethod;
+    private javax.swing.JLabel jLabelIntervalNumber;
     private javax.swing.JLabel jLabelPourcentage;
     private javax.swing.JLabel jLabelSource;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextAreaLog;
     private javax.swing.JTextField jTextFieldClassIndex;
+    private javax.swing.JTextField jTextFieldIntervalNumber;
     private javax.swing.JTextField jTextFieldPourcentage;
     private javax.swing.JTextField jTextFieldSource;
     // End of variables declaration//GEN-END:variables

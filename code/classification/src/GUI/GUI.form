@@ -38,30 +38,44 @@
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Group type="102" alignment="0" attributes="1">
+                              <Component id="jLabelPourcentage" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jTextFieldPourcentage" max="32767" attributes="0"/>
+                          </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabelAlgorithme" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelClassIndex" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jComboBoxAlgorihtme" min="-2" pref="161" max="-2" attributes="1"/>
+                              <Component id="jTextFieldClassIndex" min="-2" pref="31" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Group type="102" alignment="0" attributes="1">
-                                  <Component id="jLabelPourcentage" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jTextFieldPourcentage" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabelClassIndex" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldClassIndex" min="-2" pref="31" max="-2" attributes="0"/>
-                              </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="jLabelIntervalNumber" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jTextFieldIntervalNumber" min="-2" pref="41" max="-2" attributes="0"/>
                           </Group>
+                          <Group type="102" attributes="1">
+                              <Component id="jLabelDiscretisationMethod" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jComboBoxDiscretisation" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace pref="46" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="jButtonClassify" max="32767" attributes="1"/>
+                          <Component id="jButtonReadData" alignment="1" pref="108" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jButtonReadData" pref="249" max="32767" attributes="1"/>
-                          <Component id="jButtonClassify" alignment="1" pref="249" max="32767" attributes="1"/>
-                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jLabelAlgorithme" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jComboBoxAlgorihtme" min="-2" pref="161" max="-2" attributes="1"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jCheckBoxDiscretisation" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -83,12 +97,15 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabelAlgorithme" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jComboBoxAlgorihtme" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jCheckBoxDiscretisation" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jTextFieldPourcentage" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelPourcentage" alignment="3" min="-2" pref="15" max="-2" attributes="0"/>
                   <Component id="jButtonReadData" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelIntervalNumber" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jTextFieldIntervalNumber" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
@@ -96,6 +113,8 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabelClassIndex" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextFieldClassIndex" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelDiscretisationMethod" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jComboBoxDiscretisation" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -104,7 +123,7 @@
                   </Group>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="220" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="226" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -167,7 +186,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="jButtonReadData">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Read data"/>
+        <Property name="text" type="java.lang.String" value="Initialisation"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
@@ -193,6 +212,7 @@
         <Component class="javax.swing.JTextArea" name="jTextAreaLog">
           <Properties>
             <Property name="columns" type="int" value="20"/>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="rows" type="int" value="5"/>
           </Properties>
         </Component>
@@ -201,6 +221,44 @@
     <Component class="javax.swing.JTextField" name="jTextFieldPourcentage">
       <Properties>
         <Property name="text" type="java.lang.String" value="66"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="jCheckBoxDiscretisation">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Discr&#xe9;tisation"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxDiscretisationActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelIntervalNumber">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Nombre d&apos;intervalles : "/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="jTextFieldIntervalNumber">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="10"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelDiscretisationMethod">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="M&#xe9;thode : "/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="jComboBoxDiscretisation">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="2">
+            <StringItem index="0" value="EWD"/>
+            <StringItem index="1" value="EFD"/>
+          </StringArray>
+        </Property>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>
   </SubComponents>
