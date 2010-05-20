@@ -92,6 +92,8 @@ public class NaiveBayes extends AbstractClassifier {
 		{
 			for(int i=0;i<attributs.size();i++)
 			{
+				if(i!=classIndex)
+				{
 				ArrayList<String> e = attributs.get(i);
 				ArrayList<Double> a=new ArrayList<Double>();
 				boolean b=true;
@@ -120,7 +122,7 @@ public class NaiveBayes extends AbstractClassifier {
 				{
 					ArrayList<Integer> f = nbAttributs.get(i);
 					e.clear();
-					e.add("real");
+					e.add("Discret");
 					e.add(String.valueOf(min));
 					e.add(String.valueOf(max));
 					e.add(String.valueOf((max-min)/intervalNumber));
@@ -129,6 +131,7 @@ public class NaiveBayes extends AbstractClassifier {
 					{
 						f.add(0);
 					}
+				}
 				}
 			}
 		}
@@ -146,18 +149,18 @@ public class NaiveBayes extends AbstractClassifier {
 			}
 			
 		}
-		for (int i = 0; i < nbAttributs.size(); i++) {
-			ArrayList<Integer> e = nbAttributs.get(i);
-			for (int j = 0; j < e.size(); j++) {
-				System.out.print(e.get(j)+" ");
-			}
-			System.out.println();
-			ArrayList<String> dd = attributs.get(i);
-			for (int j = 0; j < dd.size(); j++) {
-				System.out.print(dd.get(j)+" - ");
-			}
-			System.out.println();
-		}
+//		for (int i = 0; i < nbAttributs.size(); i++) {
+//			ArrayList<Integer> e = nbAttributs.get(i);
+//			for (int j = 0; j < e.size(); j++) {
+//				System.out.print(e.get(j)+" ");
+//			}
+//			System.out.println();
+//			ArrayList<String> dd = attributs.get(i);
+//			for (int j = 0; j < dd.size(); j++) {
+//				System.out.print(dd.get(j)+" - ");
+//			}
+//			System.out.println();
+//		}
 	}
 	
 	/**
@@ -201,23 +204,42 @@ public class NaiveBayes extends AbstractClassifier {
 				for (int i = 0; i < result.length; i++) {
 					if(i!=classIndex)
 					{
-					ArrayList<String> e = attributs.get(i);
-					ArrayList<Integer> f = nbAttributs.get(i);
-					int j = e.indexOf(result[i]);
-					f.set(j, f.get(j) + 1);
-					
-					e = attributs.get(classIndex);
-					int m = e.indexOf(result[classIndex]);
-					
-					ArrayList<Integer> z = nbAttributs.get(classIndex);
-					if (b) {
-						z.set(m, z.get(m) + 1);
-						b = false;
+						ArrayList<String> e = attributs.get(i);
+						ArrayList<Integer> f = nbAttributs.get(i);
+						int j=0;
+						if(e.get(0)!="Discret")
+						{
+							j = e.indexOf(result[i]);
+						}
+						else
+						{
+							Double d=Double.parseDouble(e.get(1))+Double.parseDouble(e.get(3));
+							while(j<intervalNumber-1)
+							{
+							if(Double.parseDouble(result[i])<=d)
+								break;
+							d=d+Double.parseDouble(e.get(3));
+							j++;
+							}
+						}
+						//System.out.println("j  "+j);
+						f.set(j, f.get(j) + 1);
+							
+						e = attributs.get(classIndex);
+						int m = e.indexOf(result[classIndex]);
+							
+						ArrayList<Integer> z = nbAttributs.get(classIndex);
+						if (b) {
+							z.set(m, z.get(m) + 1);
+							b = false;
+						}
+						ArrayList<ArrayList<Integer>> g = nbVal.get(i);
+						ArrayList<Integer> h = g.get(j);
+						h.set(m, h.get(m) + 1);
+
 					}
-					ArrayList<ArrayList<Integer>> g = nbVal.get(i);
-					ArrayList<Integer> h = g.get(j);
-					h.set(m, h.get(m) + 1);
-					}
+					else 
+						i--;
 				}
 				b = true;
 			}
@@ -235,9 +257,8 @@ public class NaiveBayes extends AbstractClassifier {
 				double max=0;
 				int prediction=0;
 				int classValue = a.indexOf(result[classIndex]);
-				for(int i=0;i<a.size();i++)
+				for(int i=0;i<aa.size();i++)
 				{
-					
 					double p= aa.get(i)/(double)trainSize;
 					for (int j = 0; j < result.length; j++) 
 					{
@@ -246,11 +267,29 @@ public class NaiveBayes extends AbstractClassifier {
 						ArrayList<String> bb=attributs.get(j);
 						ArrayList<Integer> bbb=nbAttributs.get(j);
 						ArrayList<ArrayList<Integer>> cc=nbVal.get(j);
-						ArrayList<Integer> ccc=cc.get(bb.indexOf(result[j]));						
-						p=p*((double)(ccc.get(i)/(double)aa.get(i)))/(double)(bbb.get(bb.indexOf(result[j]))/(double)trainSize);
+						int k=0;
+						ArrayList<Integer> ccc=cc.get(k);						
+						
+						if(bb.get(0)!="Discret")
+						{
+							k = bb.indexOf(result[j]);
+						}
+						else
+						{
+							Double d=Double.parseDouble(bb.get(1))+Double.parseDouble(bb.get(3));
+							while(k<intervalNumber-1)
+							{
+							if(Double.parseDouble(result[i])<=d)
+								break;
+							d=d+Double.parseDouble(bb.get(3));
+							k++;
+							}
+						}
+						
+						p=p*((double)(ccc.get(i)/(double)aa.get(i)))/(double)(bbb.get(k)/(double)trainSize);
 						}
 					}
-					v+="\nla probabalité de "+a.get(i)+"est de "+p+"\n";
+					//v+="\nla probabalité de "+a.get(i)+"est de "+p+"\n";
 					if(p>max)
 					{
 						max=p;
@@ -260,7 +299,7 @@ public class NaiveBayes extends AbstractClassifier {
 				theResults.add(new Couple<Integer, Integer>(prediction, classValue));
 				ind++;
 			}
-			System.out.print(v);
+			//System.out.print(v);
 			
 			
 		} catch (Exception e) {
@@ -269,47 +308,47 @@ public class NaiveBayes extends AbstractClassifier {
 		//printProbabilities();
 	}	
 
-	/**
-	 * affiche les probabilités
-	 */
-	private void printProbabilities() {
-		String s="Attribut:\n\n";
-		ArrayList<Integer> a =nbAttributs.get(classIndex);
-		for(int i=0;i<attributs.size();i++)
-		{
-			if(i!=classIndex)
-			{
-			ArrayList<String> e =attributs.get(i);
-			ArrayList<Integer> f =nbAttributs.get(i);
-			ArrayList< ArrayList<Integer> > g =nbVal.get(i);
-			for(int j=0;j<e.size();j++)
-			{		
-				s+=e.get(j)+" "+f.get(j)+" ";
-				if(j!=e.size())
-				{
-					ArrayList<Integer> h =g.get(j);
-					s+="( ";
-					for(int k=0;k<h.size();k++)
-					{
-						s+=h.get(k)+"/"+a.get(k)+",";
-					}
-					s+=") - ";
-				}
-			}
-			s+="\n";
-			}
-		}
-		ArrayList<String> e =attributs.get(classIndex);
-		for(int j=0;j<e.size();j++)
-		{		
-			s+=e.get(j)+" "+a.get(j)+" ";
-			s+=" - ";
-		}
-		s+="\n";		
-		
-		System.out.print(s);
-		
-	}
+//	/**
+//	 * affiche les probabilités
+//	 */
+//	private void printProbabilities() {
+//		String s="Attribut:\n\n";
+//		ArrayList<Integer> a =nbAttributs.get(classIndex);
+//		for(int i=0;i<attributs.size();i++)
+//		{
+//			if(i!=classIndex)
+//			{
+//			ArrayList<String> e =attributs.get(i);
+//			ArrayList<Integer> f =nbAttributs.get(i);
+//			ArrayList< ArrayList<Integer> > g =nbVal.get(i);
+//			for(int j=0;j<e.size();j++)
+//			{		
+//				s+=e.get(j)+" "+f.get(j)+" ";
+//				if(j!=e.size())
+//				{
+//					ArrayList<Integer> h =g.get(j);
+//					s+="( ";
+//					for(int k=0;k<h.size();k++)
+//					{
+//						s+=h.get(k)+"/"+a.get(k)+",";
+//					}
+//					s+=") - ";
+//				}
+//			}
+//			s+="\n";
+//			}
+//		}
+//		ArrayList<String> e =attributs.get(classIndex);
+//		for(int j=0;j<e.size();j++)
+//		{		
+//			s+=e.get(j)+" "+a.get(j)+" ";
+//			s+=" - ";
+//		}
+//		s+="\n";		
+//		
+//		System.out.print(s);
+//		
+//	}
 
 	/**
 	 * retourne le tableau des résultats

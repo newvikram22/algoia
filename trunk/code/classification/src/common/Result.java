@@ -8,5 +8,5 @@ public class Result {
 	public Integer numClasses;
 	public Double errorC45;
 	public Double errorNaiveBayes;
-
+	public Double errorNaiveBayes2;
 }

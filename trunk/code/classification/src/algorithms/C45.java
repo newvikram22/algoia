@@ -3,7 +3,6 @@ package algorithms;
 import java.io.File;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import common.Couple;
@@ -11,7 +10,6 @@ import common.DataToArff;
 import common.Util;
 
 import weka.classifiers.trees.J48;
-import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 

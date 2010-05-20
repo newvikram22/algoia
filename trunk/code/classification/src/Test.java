@@ -1,15 +1,14 @@
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
 import common.Result;
 import common.Util;
 
-import algorithms.AbstractClassifier;
 import algorithms.C45;
 import algorithms.NaiveBayesV2;
+
 
 
 public class Test {
@@ -29,10 +28,11 @@ public class Test {
 	
 	private double meanC45;
 	private double meanNaiveBayes;
+	private double meanNaiveBayes2;
 	
 	private int numWinsC45;
 	private int numWinsNaiveBayes;
-	
+	private int numWinsNaiveBayes2;
 	
 	private void init() {	
 		
@@ -101,9 +101,11 @@ public class Test {
 		int counter = 0;
 		meanC45 = 0.;
 		meanNaiveBayes = 0.;
+		meanNaiveBayes2 = 0.;
 		
 		numWinsC45 = 0;
 		numWinsNaiveBayes = 0;
+		numWinsNaiveBayes2 = 0;
 		
 		for (String path : listDatasets) {
 			
@@ -123,6 +125,8 @@ public class Test {
 			NaiveBayesV2 naiveBayes = new NaiveBayesV2();
 			try{
 				naiveBayes.setClassIndex(classIndexes.get(path));
+				naiveBayes.setIntervalNumber(4);
+				naiveBayes.setDiscretizationMethod("EWD");
 				naiveBayes.readData(path, percentage);
 				naiveBayes.classify();
 			} catch (Exception e) {
@@ -131,38 +135,58 @@ public class Test {
 				succed = false;
 			}
 			
+			NaiveBayesV2 naiveBayes2 = new NaiveBayesV2();
+			try{
+				naiveBayes2.setClassIndex(classIndexes.get(path));
+				naiveBayes2.readData(path, percentage);
+				naiveBayes2.classify();
+			} catch (Exception e) {
+				System.err.println("Error with NaiveBayes on file : "+path);
+				e.printStackTrace();
+				succed = false;
+			}
+			
 			if (succed) {
-				
-				
-							
+											
 				counter++;
 				
 				Result result = new Result();
 				result.dataset = (new File(path)).getName().replace(".data", "");
 				result.errorC45 = c45.getPercentageIncorrect();
 				result.errorNaiveBayes = naiveBayes.getPercentageIncorrect();
-				result.numAttributes = naiveBayes.getNumAttributes();
-				result.numClasses = naiveBayes.getClasses().size();
-				result.numInstances = naiveBayes.getInstances().size();
+				result.errorNaiveBayes2 = naiveBayes2.getPercentageIncorrect();
+				result.numAttributes = naiveBayes2.getNumAttributes();
+				result.numClasses = naiveBayes2.getClasses().size();
+				result.numInstances = naiveBayes2.getInstances().size();
 				
 				results.add(result);
 				
 				if (result.errorC45 < result.errorNaiveBayes) {
-					numWinsC45++;
+					if (result.errorC45 < result.errorNaiveBayes2) {
+						numWinsC45++;
+					}
+					else{
+						numWinsNaiveBayes2++;
+					}
 				} else {
-					numWinsNaiveBayes++;
+					if (result.errorNaiveBayes < result.errorNaiveBayes2) {
+						numWinsNaiveBayes++;
+					}
+					else{
+						numWinsNaiveBayes2++;
+					}
 				}
 				
 				meanC45 += result.errorC45;
 				meanNaiveBayes += result.errorNaiveBayes;
+				meanNaiveBayes2 += result.errorNaiveBayes2;
 			}	
 		}
 		
 		meanC45 /= counter;
 		meanNaiveBayes /= counter;
-		
+		meanNaiveBayes2 /= counter;
 	}
-	
 	private void processTests() {
 		init();
 		
@@ -173,11 +197,11 @@ public class Test {
 	private String toLatexArray() {
 		String str = "";
 
-		str += "\\begin{tabular}{|c|c|c|c|c|c|c|}\n";
+		str += "\\begin{tabular}{|c|c|c|c|c|c|c|c|}\n";
 		str += "\\hline\n";
-		str += "Dataset & num. instances & nature & num. attributes & num. classes & \\multicolumn{2}{c|}{ Classification error } \\\\\n";
+		str += "Dataset & num. instances & nature & num. attributes & num. classes & \\multicolumn{3}{c|}{ Classification error } \\\\\n";
 		str += "\\cline{5-6}\n";
-		str += "& & & & & C4.5 & Naive Bayes \\\\\n";
+		str += "& & & & & C4.5 & Naive Bayes k=4 & Naive Bayes \\\\\n";
 		str += "\\hline\n";
 		
 		for (Result result : results) {
@@ -187,14 +211,15 @@ public class Test {
 					result.numAttributes+"&"+
 					result.numClasses+"&"+
 					Util.printRounded(result.errorC45, 3)+"\\%&"+
-					Util.printRounded(result.errorNaiveBayes, 3)+"\\% \\\\\n";
+					Util.printRounded(result.errorNaiveBayes, 3)+"\\%&"+
+					Util.printRounded(result.errorNaiveBayes2, 3)+"\\% \\\\\n";
 			str += "\\hline\n";
 		}
 		
-		str += "\\multicolumn{5}{|r|}{ Mean error } & "+Util.printRounded(meanC45, 3)+" & "+Util.printRounded(meanNaiveBayes, 3)+"\\\\\n" ;
+		str += "\\multicolumn{5}{|r|}{ Mean error } & "+Util.printRounded(meanC45, 3)+" & "+Util.printRounded(meanNaiveBayes, 3)+" & "+Util.printRounded(meanNaiveBayes2, 3)+"\\\\\n" ;
 		str += "\\hline\n"	;
 		
-		str += "\\multicolumn{5}{|r|}{ num. wins } & "+numWinsC45+" & "+numWinsNaiveBayes+"\\\\\n" ;
+		str += "\\multicolumn{5}{|r|}{ num. wins } & "+numWinsC45+" & "+numWinsNaiveBayes+" & "+numWinsNaiveBayes2+"\\\\\n" ;
 		str += "\\hline\n"	;
 		
 		

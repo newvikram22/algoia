@@ -3,13 +3,11 @@ package algorithms;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
-import weka.core.Instances;
 
 import common.Couple;
 import common.Util;
@@ -65,9 +63,6 @@ public class NaiveBayesV2 extends AbstractClassifier {
 	 */
 	List<Couple<Integer, Integer>> theResults;
 	
-	
-	
-	
 	public List<List<String>> getInstances() {
 		return instances;
 	}
@@ -92,8 +87,128 @@ public class NaiveBayesV2 extends AbstractClassifier {
 		this.classes = classes;
 	}
 
+	private void methodEWD() {
+		for(int i=0;i<numAttributes;i++)
+		{
+			boolean b=true;
+			double d,max=-Double.MAX_VALUE,min=Double.MAX_VALUE;
+			
+			if(i!=classIndex)
+			{
+				for(int j=0;j<instances.size();j++)
+				{
+					List<String> e =  instances.get(j);
+					try{
+						d=Double.parseDouble(e.get(i));
+					}
+					catch(Exception e1)
+					{
+						b=false;
+						break;
+					}
+					
+					if(d>max)
+						max=d;
+					if(d<min)
+						min=d;
+				}
+				
+				if(b==true)
+				{
+					double w=(max-min)/intervalNumber;
+					for(int j=0;j<instances.size();j++)
+					{
+						List<String> e =  instances.get(j);
+						d=min+w;
+						int k=0;
+						while(k<intervalNumber-1)
+						{
+							if(Double.parseDouble(e.get(i))<=d)
+								break;
+							d=d+w;
+							k++;
+						}
+						e.set(i,String.valueOf(k));
+					}
+				}
+			}
+		}
+	}
+
+	private void methodEFD() {
+		for(int i=0;i<numAttributes;i++)
+		{
+			boolean b=true;
+			double d;
+			ArrayList<Double> tri= new ArrayList<Double>();
+			ArrayList<Integer> triIndex= new ArrayList<Integer>();
+			if(i!=classIndex)
+			{
+				for(int j=0;j<instances.size();j++)
+				{
+					List<String> e =  instances.get(j);
+					try{
+						d=Double.parseDouble(e.get(i));
+					}
+					catch(Exception e1)
+					{
+						b=false;
+						break;
+					}
+					tri.add(d);
+					triIndex.add(j);
+				}
+				
+				if(b==true)
+				{
+					int j=0;
+			        boolean inversion;
+			        do
+			            {
+			            inversion=false;
+
+			            for(int k=0;k<tri.size()-1;k++)
+			                {
+			                if(tri.get(k)>tri.get(k+1))
+			                    {
+			                    Collections.swap(tri, k, k+1);
+			                    Collections.swap(triIndex, k, k+1);
+			                    inversion=true;
+			                    }
+			                }
+			             }
+			        while(inversion);
+			        int l=0;
+					while(j<instances.size())
+					{
+						int k=0;
+						while((k<instances.size()/intervalNumber || k==0) && j<instances.size())
+						{
+							List<String> e =  instances.get(triIndex.get(j));
+							e.set(i, String.valueOf(k));
+							k++;j++;
+						}
+						if(l<intervalNumber)
+							l++;
+					}
+				}
+			}
+		}
+	}	
+	
+	private void discretizeData() {
+		if(discretizationMethod=="EWD")
+			methodEWD();
+		else
+			methodEFD();
+	}
+	
 	@Override
 	protected void doClassify() {
+		
+		//Discrétisation
+		if(intervalNumber!=-1)
+			discretizeData();
 		
 		//construction ensemble d'apprentissage/ensemble de test
 		int trainSize = (int)Math.round(percentage*instances.size()/100.);
@@ -195,7 +310,7 @@ public class NaiveBayesV2 extends AbstractClassifier {
 				ii++;
 			}
 			
-			theResults.add(new Couple(prediction, realClass));			
+			theResults.add(new Couple<Integer,Integer>(prediction, realClass));			
 			
 		}	
 	}
@@ -262,6 +377,7 @@ public class NaiveBayesV2 extends AbstractClassifier {
 					//classIndex = instance.size()-1;
 				}
 			}
+			
 			
 		} catch(Exception e) {
 			e.printStackTrace();

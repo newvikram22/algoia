@@ -12,4 +12,5 @@ public class Couple<T, U> {
 	public String toString() {
 		return "("+first+", "+second+")\n";
 	}
+	
 }
