@@ -31,6 +31,11 @@ public abstract class AbstractClassifier {
 	protected int classIndex;
 	
 	/**
+	 * the discretization method
+	 */
+	protected String discretizationMethod;
+	
+	/**
 	 * nombre d'intervalles pour la discrétisation
 	 */
 	protected int intervalNumber;
@@ -81,6 +86,14 @@ public abstract class AbstractClassifier {
 		this.intervalNumber = intervalNumber;
 	}
 
+	public String getDiscretizationMethod() {
+		return discretizationMethod;
+	}
+
+	public void setDiscretizationMethod(String discretizationMethod) {
+		this.discretizationMethod = discretizationMethod;
+	}
+	
 	public int getClassIndex() {
 		return classIndex;
 	}
